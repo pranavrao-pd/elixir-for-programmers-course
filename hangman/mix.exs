@@ -21,7 +21,8 @@ defmodule Hangman.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      { :dictionary, path: Path.expand("../dictionary") },
+      {:dictionary, path: Path.expand("../dictionary")},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
   end
 end

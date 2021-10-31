@@ -6,16 +6,32 @@ defmodule Hangman.Game do
     used: MapSet.new()
   )
 
+  @spec new_game(binary) :: %Hangman.Game{
+          game_state: :initializing,
+          letters: [binary],
+          turns_left: 7,
+          used: MapSet.t()
+        }
   def new_game(word) do
     %Hangman.Game{
       letters: word |> String.codepoints()
     }
   end
 
+  @spec new_game :: %Hangman.Game{
+          game_state: :initializing,
+          letters: [binary],
+          turns_left: 7,
+          used: MapSet.t(any)
+        }
   def new_game() do
     new_game(Dictionary.random_word())
   end
 
+  @spec make_move(map, any) :: %{
+          :game_state => :already_used | :bad_guess | :good_guess | :lost | :won,
+          optional(any) => any
+        }
   def make_move(game = %{game_state: state}, _guess) when state in [:won, :lost] do
     game
   end
@@ -24,6 +40,16 @@ defmodule Hangman.Game do
     accept_move(game, guess, MapSet.member?(game.used, guess))
   end
 
+  @spec tally(
+          atom
+          | %{
+              :game_state => any,
+              :letters => any,
+              :turns_left => any,
+              :used => any,
+              optional(any) => any
+            }
+        ) :: %{game_state: any, letters: list, turns_left: any}
   def tally(game) do
     %{
       game_state: game.game_state,
